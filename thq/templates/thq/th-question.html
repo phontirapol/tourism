@@ -1,0 +1,520 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>แบบสอบถาม</title>
+    <link rel="stylesheet" href="{% static 'thq/style.css' %}"/>
+</head>
+<body>
+<form id="thqForm" action="{% url 'th-question' %}" method="post">
+    {% csrf_token %}
+
+    <!-- One "tab" for each step in the form: -->
+    <div class="tab">
+        <!-- Section description -->
+        <h2>ส่วนที่ 1 พฤติกรรมการเดินทางของนักท่องเที่ยวครั้งล่าสุด ในช่วงปี 2561 – 2564</h2>
+        <!------------ Questions set ------------>
+        <div>
+            <p>
+            <h4>1. ช่วงเวลาที่ท่องเที่ยวในเมืองไทย<span class="underline">เฉพาะทริปล่าสุด</span></h4>
+            ตั้งแต่ <input type="date" name="th_from" />
+            ถึง <input type="date" name="th_to" />
+
+            จังหวัดที่พำนัก
+            <input type="text" list="provs0" name="th_prov_origin" placeholder="(โปรดเลือกจังหวัด)"/>
+            <datalist id="provs0">
+                {% for province in provinces %}
+                <option value="{{ province }}">{{ province }}</option>
+                {% endfor %}
+            </datalist>
+            </p>
+
+            <!---- First destination ---->
+            <p>
+            <h4>1.1 จังหวัดปลายทางแรกของท่าน
+                <input type="text" list="provs1" name="th_prov1" placeholder="(โปรดเลือกจังหวัด)"/>
+                <datalist id="provs1">
+                    {% for province in provinces %}
+                    <option value="{{ province }}">{{ province }}</option>
+                    {% endfor %}
+                </datalist>
+            </h4>
+
+            1.1.1 โปรดเลือกรูปแบบการเดินทางหลัก จากจังหวัดที่พำนักมายังจังหวัดนี้ (อื่นๆ โปรดระบุ)
+            <input type="text" list="modesc1" name="th_mode_cross1" placeholder="(โปรดเลือกหรือระบุ)"/>
+            <datalist id="modesc1">
+                {% for mode in transport_modes %}
+                <option value="{{ mode }}">{{ mode }}</option>
+                {% endfor %}
+            </datalist>
+
+            ค่าเดินทาง<span class="bold">ข้ามจังหวัด</span> (บาท/คน)<input type="text" name="th_cost_cross1" id=""/>
+
+            โปรดเลือกเหตุผลสำคัญที่สุดในการเลือกโหมดนี้ (อื่นๆ โปรดระบุ)
+            <input type="text" list="reasonsc1" name="th_reason_cross1" placeholder="(โปรดเลือกหรือระบุ)"/>
+            <datalist id="reasonsc1">
+                {% for reason in reasons %}
+                <option value="{{ reason }}">{{ reason }}</option>
+                {% endfor %}
+            </datalist>
+
+            รูปแบบการเดินทาง<span class="bold">ภายในจังหวัด</span>นี้
+            <input type="text" list="modesw1" name="th_mode_within1"/>
+            <datalist id="modesw1">
+                {% for mode in transport_modes %}
+                <option value="{{ mode }}">{{ mode }}</option>
+                {% endfor %}
+            </datalist>
+
+            ค่าเดินทาง<span class="bold">ภายในจังหวัด</span> (บาท/คน)<input type="text" name="th_cost_within1" id=""/>
+
+            เหตุผลสำคัญที่สุดในการเลือกโหมดนี้
+            <input type="text" list="reasonsw1" name="th_reason_within1"/>
+            <datalist id="reasonsw1">
+                {% for reason in reasons %}
+                <option value="{{ reason }}">{{ reason }}</option>
+                {% endfor %}
+            </datalist>
+
+            สถานที่นี้คือจุดหมายปลายทางสุดท้ายก่อนกลับที่พักอาศัยหรือไม่
+            <a href="#return"><input type="button" value="ใช่ (ข้ามไปยังหัวข้อ 1.5)"></a>
+            </p>
+
+            <!---- Second destination ---->
+            <p>
+            <h4>1.2 จังหวัดปลายทางที่ 2 ของท่าน
+                <input type="text" list="provs2" name="th_prov2" placeholder="(โปรดเลือกจังหวัด)" />
+                <datalist id="provs2">
+                    {% for province in provinces %}
+                    <option value="{{ province }}">{{ province }}</option>
+                    {% endfor %}
+                </datalist>
+            </h4>
+
+            รูปแบบการเดินทางหลัก จากจังหวัดที่แล้วมายังจังหวัดนี้
+            <input type="text" list="modesc2" name="th_mode_cross2"/>
+            <datalist id="modesc2">
+                {% for mode in transport_modes %}
+                <option value="{{ mode }}">{{ mode }}</option>
+                {% endfor %}
+            </datalist>
+
+            ค่าเดินทาง<span class="bold">ข้ามจังหวัด</span> (บาท/คน)<input type="text" name="th_cost_cross2" id=""/>
+
+            เหตุผลสำคัญที่สุดในการเลือกโหมดนี้
+            <input type="text" list="reasonsc2" name="th_reason_cross2"/>
+            <datalist id="reasonsc2">
+                {% for reason in reasons %}
+                <option value="{{ reason }}">{{ reason }}</option>
+                {% endfor %}
+            </datalist>
+
+            รูปแบบการเดินทาง<span class="bold">ภายในจังหวัด</span>นี้
+            <input type="text" list="modesw2" name="th_mode_within2"/>
+            <datalist id="modesw2">
+                {% for mode in transport_modes %}
+                <option value="{{ mode }}">{{ mode }}</option>
+                {% endfor %}
+            </datalist>
+
+            ค่าเดินทาง<span class="bold">ภายในจังหวัด</span> (บาท/คน)<input type="text" name="th_cost_within2" id=""/>
+
+            เหตุผลสำคัญที่สุดในการเลือกโหมดนี้
+            <input type="text" list="reasonsw2" name="th_reason_within2"/>
+            <datalist id="reasonsw2">
+                {% for reason in reasons %}
+                <option value="{{ reason }}">{{ reason }}</option>
+                {% endfor %}
+            </datalist>
+
+            สถานที่นี้คือจุดหมายปลายทางสุดท้ายก่อนกลับที่พักอาศัยหรือไม่
+            <a href="#return"><input type="button" value="ใช่ (ข้ามไปยังหัวข้อ 1.5)"></a>
+            </p>
+
+            <!---- Third destination ---->
+            <p>
+            <h4>1.3 จังหวัดปลายทางที่ 3 ของท่าน
+                <input type="text" list="provs3" name="th_prov3" placeholder="(โปรดเลือกจังหวัด)"/>
+                <datalist id="provs3">
+                    {% for province in provinces %}
+                    <option value="{{ province }}">{{ province }}</option>
+                    {% endfor %}
+                </datalist>
+            </h4>
+
+            รูปแบบการเดินทางหลัก จากจังหวัดที่แล้วมายังจังหวัดนี้
+            <input type="text" list="modesc3" name="th_mode_cross3"/>
+            <datalist id="modesc3">
+                {% for mode in transport_modes %}
+                <option value="{{ mode }}">{{ mode }}</option>
+                {% endfor %}
+            </datalist>
+
+            ค่าเดินทาง<span class="bold">ข้ามจังหวัด</span> (บาท/คน)<input type="text" name="th_cost_cross3" id=""/>
+
+            เหตุผลสำคัญที่สุดในการเลือกโหมดนี้
+            <input type="text" list="reasonsc3" name="th_reason_cross3"/>
+            <datalist id="reasonsc3">
+                {% for reason in reasons %}
+                <option value="{{ reason }}">{{ reason }}</option>
+                {% endfor %}
+            </datalist>
+
+            รูปแบบการเดินทาง<span class="bold">ภายในจังหวัด</span>นี้
+            <input type="text" list="modesw3" name="th_mode_within3"/>
+            <datalist id="modesw3">
+                {% for mode in transport_modes %}
+                <option value="{{ mode }}">{{ mode }}</option>
+                {% endfor %}
+            </datalist>
+
+            ค่าเดินทาง<span class="bold">ภายในจังหวัด</span> (บาท/คน)<input type="text" name="th_cost_within3" id=""/>
+
+            เหตุผลสำคัญที่สุดในการเลือกโหมดนี้
+            <input type="text" list="reasonsw3" name="th_reason_within3"/>
+            <datalist id="reasonsw3">
+                {% for reason in reasons %}
+                <option value="{{ reason }}">{{ reason }}</option>
+                {% endfor %}
+            </datalist>
+
+            สถานที่นี้คือจุดหมายปลายทางสุดท้ายก่อนกลับที่พักอาศัยหรือไม่
+            <a href="#return"><input type="button" value="ใช่ (ข้ามไปยังหัวข้อ 1.5)"></a>
+            </p>
+
+            <!---- Last destination ---->
+            <p>
+            <h4>1.4 จังหวัดปลายทางสุดท้ายของท่าน
+                <input type="text" list="provs4" name="th_prov4" placeholder="(โปรดเลือกจังหวัด)"/>
+                <datalist id="provs4">
+                    {% for province in provinces %}
+                    <option value="{{ province }}">{{ province }}</option>
+                    {% endfor %}
+                </datalist>
+            </h4>
+
+            รูปแบบการเดินทางหลัก จากจังหวัดที่แล้วมายังจังหวัดนี้
+            <input type="text" list="modesc4" name="th_mode_cross4"/>
+            <datalist id="modesc4">
+                {% for mode in transport_modes %}
+                <option value="{{ mode }}">{{ mode }}</option>
+                {% endfor %}
+            </datalist>
+
+            ค่าเดินทาง<span class="bold">ข้ามจังหวัด</span> (บาท/คน)<input type="text" name="th_cost_cross4" id=""/>
+
+            เหตุผลสำคัญที่สุดในการเลือกโหมดนี้
+            <input type="text" list="reasonsc4" name="th_reason_cross4"/>
+            <datalist id="reasonsc4">
+                {% for reason in reasons %}
+                <option value="{{ reason }}">{{ reason }}</option>
+                {% endfor %}
+            </datalist>
+
+            รูปแบบการเดินทาง<span class="bold">ภายในจังหวัด</span>นี้
+            <input type="text" list="modesw4" name="th_mode_within4"/>
+            <datalist id="modesw4">
+                {% for mode in transport_modes %}
+                <option value="{{ mode }}">{{ mode }}</option>
+                {% endfor %}
+            </datalist>
+
+            ค่าเดินทาง<span class="bold">ภายในจังหวัด</span> (บาท/คน)<input type="text" name="th_cost_within4" id=""/>
+
+            เหตุผลสำคัญที่สุดในการเลือกโหมดนี้
+            <input type="text" list="reasonsw4" name="th_reason_within4"/>
+            <datalist id="reasonsw4">
+                {% for reason in reasons %}
+                <option value="{{ reason }}">{{ reason }}</option>
+                {% endfor %}
+            </datalist>
+            </p>
+
+            <!---- Back to the origin ---->
+            <p>
+            <h4 id="return">1.5 การเดินทางกลับสู่จังหวัดที่พำนัก</h4>
+
+            รูปแบบการเดินทางกลับสู่จังหวัดที่พำนัก
+            <input type="text" list="moder" name="th_mode_return"/>
+            <datalist id="moder">
+                {% for mode in transport_modes %}
+                <option value="{{ mode }}">{{ mode }}</option>
+                {% endfor %}
+            </datalist>
+
+            ค่าเดินทางเพื่อกลับจังหวัดที่พำนักของท่าน (บาท/คน)<input type="text" name="th_cost_return" id=""/>
+
+            เหตุผลสำคัญที่สุดในการเลือกโหมดนี้
+            <input type="text" list="reasonsr" name="th_reason_return"/>
+            <datalist id="reasonsr">
+                {% for reason in reasons %}
+                <option value="{{ reason }}">{{ reason }}</option>
+                {% endfor %}
+            </datalist>
+            </p>
+
+            <p>
+            <h4>2. ค่าใช้จ่ายเพื่อการเดินทางของการท่องเที่ยวครั้งล่าสุด โดยประมาณ (บาท/คน)<input type="text"
+                                                                                                 name="th_cost_travel"/>
+            </h4>
+            </p>
+
+            <p>
+            <h4>3. งบประมาณ/ค่าใช้จ่ายรวมในการท่องเที่ยวครั้งนี้ รวมค่าที่พัก
+                ค่าอาหารและเครื่องดื่ม ค่าซื้อสินค้าและของที่ระลึก ค่าเดินทาง และค่าใช้จ่ายอื่นๆ (บาท/คน)<input type="text" name="th_cost_all"/>
+            </h4>
+            </p>
+
+            <p>
+            <h4>4. ลักษณะการจัดการเดินทางในครั้งนี้</h4>
+            <label for="ลักษณะการจัดการเดินทางในครั้งนี้-1"><input type="radio" name="th_organize" value="1" id="ลักษณะการจัดการเดินทางในครั้งนี้-1"/>จัดการเดินทางเองทั้งหมด</label> 
+            <label for="ลักษณะการจัดการเดินทางในครั้งนี้-2"><input type="radio" name="th_organize" value="2" id="ลักษณะการจัดการเดินทางในครั้งนี้-2"/>มีหน่วย/คณะจัดการให้</label> 
+            <label for="ลักษณะการจัดการเดินทางในครั้งนี้-3"><input type="radio" name="th_organize" value="3" id="ลักษณะการจัดการเดินทางในครั้งนี้-3"/>บริษัทนำเที่ยวจัดการให้</label> 
+            </p>
+
+            <p>
+            <h4>5. จำนวนผู้ร่วมเดินทางในครั้งนี้ (รวมผู้ตอบแบบสอบถามด้วย)</h4>
+            ผู้ใหญ่ <input type="number" name="th_n_adults" value="0" min="0"/>
+            เด็กอายุไม่เกิน 15 ปี <input type="number" name="th_n_children" value="0" min="0"/>
+            ผู้สูงอายุ 60 ปีขึ้นไป <input type="number" name="th_n_elders" value="0" min="0"/>
+            </p>
+
+            <p>
+            <h4>6. ความสัมพันธ์กับผู้ร่วมเดินทางในครั้งนี้</h4>
+            <input type="text" list="rela" name="th_relationship"/>
+            <datalist id="rela">
+                <option value="เดินทางคนเดียว">เดินทางคนเดียว</option>
+                <option value="เดินทางกับครอบครัว/ญาติ">เดินทางกับครอบครัว/ญาติ</option>
+                <option value="เดินทางกับคู่รัก">เดินทางกับคู่รัก</option>
+                <option value="เดินทางกับเพื่อน/เพื่อนร่วมงาน">เดินทางกับเพื่อน/เพื่อนร่วมงาน</option>
+            </datalist>
+            </p>
+
+            <p>
+            <h4>7. ปัจจัยในการตัดสินใจออกเดินทางท่องเที่ยวในครั้งนี้ (ห้ามเลือกซ้ำกัน)</h4>
+            ลำดับที่ 1
+            <select name="th_factor1">
+                {% for factor, label in factors.items %}
+                <option value="{{ label }}">{{ factor }}</option>
+                {% endfor %}
+            </select><br>
+            ลำดับที่ 2
+            <select name="th_factor2">
+                {% for factor, label in factors.items %}
+                <option value="{{ label }}">{{ factor }}</option>
+                {% endfor %}
+            </select><br>
+            ลำดับที่ 3
+            <select name="th_factor3">
+                {% for factor, label in factors.items %}
+                <option value="{{ label }}">{{ factor }}</option>
+                {% endfor %}
+            </select>
+            </p>
+        </div>
+    </div>
+
+    <div class="tab">
+        <!-- Section description -->
+        <h2>ส่วนที่ 2 ความพึงพอใจต่อคุณภาพการให้บริการในแหล่งท่องเที่ยวจากการท่องเที่ยวครั้งล่าสุด</h2>
+        <!------------ Questions set ------------>
+        <div>
+            <p>
+            <h4>1. รูปแบบการเดินทางในการท่องเที่ยวครั้งล่าสุดที่ท่านต้องการประเมิน</h4>
+            <input type="text" list="modeslatest" name="th_mode_latest"/>
+            <datalist id="modeslatest">
+                <option value="ระบบขนส่งสาธารณะ ประจำทาง">ระบบขนส่งสาธารณะ ประจำทาง</option>
+                <option value="รถรับจ้าง ไม่ประจำทาง">รถรับจ้าง ไม่ประจำทาง</option>
+                <option value="รถเช่า">รถเช่า</option>
+                <option value="รถส่วนตัวและการเดินเท้า">รถส่วนตัวและการเดินเท้า</option>
+            </datalist>
+            </p>
+
+            <p>
+            <h4>2. ให้คะแนนความพึงพอใจและระดับความคิดเห็นสำหรับการเดินทางท่องเที่ยวจากการเดินทางที่ท่านได้เลือกในข้อ 1
+                ในข้อ 2.1 และ 2.2</h4>
+            <p>คำชี้แจง: จากการที่ท่านท่องเที่ยวต่างจังหวัดครั้งล่าสุด ให้เลือกตอบในช่องที่ตรงกับความคิดเห็นของท่าน</p>
+            <div>
+                <h4>2.1 หัวข้อคุณภาพการให้บริการในแหล่งท่องเที่ยว</h4>
+
+                {% for topic, questionset in questions1.items %}
+                <h4>{{ topic }}</h4>
+                {% for q, question in questionset.items %}
+                <p>{{ question }}</p>
+                {% for rank, score in ranks.items %}
+                <input type="radio" value="{{ score }}" name="{{ q }}">{{ rank }}
+                {% endfor %}
+                {% endfor %}
+                {% endfor %}
+            </div>
+
+            <div>
+                <h4>2.2 หัวข้อความภักดีและการตัดสินใจท่องเที่ยวซ้ำ</h4>
+
+                {% for topic, questionset in questions2.items %}
+                <h4>{{ topic }}</h4>
+                {% for q, question in questionset.items %}
+                <p>{{ question }}</p>
+                {% for rank, score in ranks.items %}
+                <input type="radio" value="{{ score }}" name="{{ q }}">{{ rank }}
+                {% endfor %}
+                {% endfor %}
+                {% endfor %}
+            </div>
+
+            </p>
+        </div>
+    </div>
+
+    <div class="tab">
+        <!-- Section description -->
+        <h2>
+            ส่วนที่ 3
+            พฤติกรรมการท่องเที่ยว<span class="bold">ข้ามจังหวัด</span>ช่วงก่อนและระหว่างการแพร่ระบาดของโรคโควิด-19
+        </h2>
+        <!------------ Questions set ------------>
+        <div>
+            <p>
+            <h4>1. จำนวนการเดินทางท่องเที่ยว<span class="bold">ข้ามจังหวัด</span>ทั้งหมดในรอบปี</h4>
+            ปี 2562 (ครั้ง) <input type="number" min="0" value="0" name="th_n_trav2562">
+            ปี 2563 (ครั้ง) <input type="number" min="0" value="0" name="th_n_trav2563">
+            </p>
+
+            <p>
+            <h4>2. ช่วงเวลาที่ท่านมักจะเดินทางท่องเที่ยว<span class="bold">ข้ามจังหวัด</span></h4>
+            <label for="วันธรรมดา"><input type="radio" name="th_day" value="1" id="วันธรรมดา">วันธรรมดา</label>
+            <label for="วันหยุด"><input type="radio" name="th_day" value="2" id="วันหยุด">วันเสาร์ วันอาทิตย์</label>
+            <label for="วันหยุดนักขัตฤกษ์"><input type="radio" name="th_day" value="3" id="วันหยุดนักขัตฤกษ์">วันหยุดนักขัตฤกษ์</label>
+            </p>
+
+            <p>
+            <h4>3. ฤดูกาลที่ท่านมักจะเดินทางท่องเที่ยว<span class="bold">ข้ามจังหวัด</span></h4>
+            <label for="ฤดูร้อน"><input type="radio" name="th_season" value="1" id="ฤดูร้อน">ฤดูร้อน (16 กุมภาพันธ์-15
+            พฤษภาคม)</label>
+            <label for="ฤดูฝน"><input type="radio" name="th_season" value="2" id="ฤดูฝน">ฤดูฝน (16 พฤษภาคม-15 ตุลาคม)</label>
+            <label for="ฤดูหนาว"><input type="radio" name="th_season" value="3" id="ฤดูหนาว">ฤดูหนาว (16 ตุลาคม-15
+            กุมภาพันธ์)</label>
+            </p>
+
+            <p>
+            <h4>4. ในช่วงการแพร่ระบาดของโรคโควิด-19 ท่านมีแนวโน้มที่จะท่องเที่ยวในจังหวัดลักษณะใด</h4>
+            <label for="covid1"><input type="radio" name="th_yn1" value="1" id="covid1">จังหวัดที่ไม่มีตัวเลขผู้ติดเชื้อ หรือมีผู้ติดเชื้อต่ำ</label>
+            <label for="covid2"><input type="radio" name="th_yn1" value="2" id="covid2">จังหวัดใกล้เคียงกับที่พำนักของท่าน (ไม่เกิน 100 กม.)</label>
+            <label for="covid3"><input type="radio" name="th_yn1" value="3" id="covid3">ไม่ท่องเที่ยวเลย</label>
+            </p>
+
+            <p>
+            <h4>5. ในช่วงการแพร่ระบาดของโรคโควิด-19 ท่านมีแนวคิดในการใช้รถส่วนตัว/รถรับจ้าง
+                มากกว่าระบบขนส่งสาธารณะหรือไม่</h4>
+            <label for="yes"><input type="radio" name="th_yn2" value="1" id="yes">ใช่</label>
+            <label for="no"><input type="radio" name="th_yn2" value="0" id="no">ไม่ใช่</label>
+            </p>
+        </div>
+    </div>
+
+    <div class="tab">
+        <!-- Section description -->
+        <h2>ส่วนที่ 4 ข้อมูลเกี่ยวกับนักท่องเที่ยว</h2>
+        <!------------ Questions set ------------>
+        <div>
+            <p>
+            <h4>1. เพศ</h4>
+            <input type="radio" name="th_gender" value="1">ชาย
+            <input type="radio" name="th_gender" value="2">หญิง
+            <input type="radio" name="th_gender" value="3">อื่นๆ
+            </p>
+
+            <p>
+            <h4>2. อายุ <input type="number" name="th_age" min="0"> </h4>
+            </p>
+
+            <p>
+            <h4>3. ระดับการศึกษาสูงสุด</h4>
+            <input type="radio" name="th_edu" value="1">ไม่ได้รับการศึกษา <br>
+            <input type="radio" name="th_edu" value="2">ประถมศึกษา<br>
+            <input type="radio" name="th_edu" value="3">มัธยมศึกษา <br>
+            <input type="radio" name="th_edu" value="4">ปวส./ปวท./อนุปริญญา<br>
+            <input type="radio" name="th_edu" value="5">ปริญญาตรี <br>
+            <input type="radio" name="th_edu" value="6">สูงกว่าปริญญาตรี
+            </p>
+
+            <p>
+            <h4>4. อาชีพปัจจุบัน</h4>
+            <input type="text" list="careers" name="th_career"/>
+            <datalist id="careers">
+                <option value="ข้าราชการ/รัฐวิสาหกิจ">ข้าราชการ/รัฐวิสาหกิจ</option>
+                <option value="พนักงานเอกชน">พนักงานเอกชน</option>
+                <option value="ค้าขาย/ธุรกิจส่วนตัว">ค้าขาย/ธุรกิจส่วนตัว</option>
+                <option value="เกษตรกร">เกษตรกร</option>
+                <option value="อิสระ/รับจ้างทั่วไป">อิสระ/รับจ้างทั่วไป</option>
+                <option value="นักเรียน/นักศึกษา">นักเรียน/นักศึกษา</option>
+                <option value="ไม่ประกอบอาชีพ">ไม่ประกอบอาชีพ</option>
+                <option value="เกษียณ">เกษียณ</option>
+            </datalist>
+            </p>
+
+            <p>
+            <h4>5. รายได้ส่วนตัว (บาทต่อเดือน)</h4>
+            <input type="radio" name="th_inc_per" value="1">น้อยกว่า 5,000 บาท <br>
+            <input type="radio" name="th_inc_per" value="2">5,000-9,999 บาท<br>
+            <input type="radio" name="th_inc_per" value="3">10,000-14,999 บาท<br>
+            <input type="radio" name="th_inc_per" value="4">15,000-19,999 บาท<br>
+            <input type="radio" name="th_inc_per" value="5">20,000-24,999 บาท<br>
+            <input type="radio" name="th_inc_per" value="6">25,000-29,999 บาท<br>
+            <input type="radio" name="th_inc_per" value="7">30,000-39,999 บาท<br>
+            <input type="radio" name="th_inc_per" value="8">40,000-49,999 บาท<br>
+            <input type="radio" name="th_inc_per" value="9">50,000-99,999 บาท<br>
+            <input type="radio" name="th_inc_per" value="10">100,000 บาทขึ้นไป<br>
+            <input type="radio" name="th_inc_per" value="11">ไม่ระบุ
+            </p>
+
+            <p>
+            <h4>6. รายได้ครัวเรือน (บาทต่อเดือน)</h4>
+            <input type="radio" name="th_inc_hh" value="1">น้อยกว่า 5,000 บาท <br>
+            <input type="radio" name="th_inc_hh" value="2">5,000-9,999 บาท<br>
+            <input type="radio" name="th_inc_hh" value="3">10,000-14,999 บาท<br>
+            <input type="radio" name="th_inc_hh" value="4">15,000-19,999 บาท<br>
+            <input type="radio" name="th_inc_hh" value="5">20,000-24,999 บาท<br>
+            <input type="radio" name="th_inc_hh" value="6">25,000-29,999 บาท<br>
+            <input type="radio" name="th_inc_hh" value="7">30,000-39,999 บาท<br>
+            <input type="radio" name="th_inc_hh" value="8">40,000-49,999 บาท<br>
+            <input type="radio" name="th_inc_hh" value="9">50,000-99,999 บาท<br>
+            <input type="radio" name="th_inc_hh" value="10">100,000 บาทขึ้นไป<br>
+            <input type="radio" name="th_inc_hh" value="11">ไม่ระบุ
+            </p>
+
+            <p>
+            <h4>7. ยานพาหนะในครัวเรือน</h4>
+            จำนวนรถยนต์ <input type="number" value="0" min="0" name="th_n_cars">
+            จำนวนรถจักรยานยนต์ <input type="number" value="0" min="0" name="th_n_bike">
+            จำนวนจักรยาน <input type="number" value="0" min="0" name="th_n_cycle">
+            จำนวนยานพาหนะอื่นๆ <input type="number" value="0" min="0" name="th_n_other">
+            </p>
+        </div>
+    </div>
+
+    <div style="overflow: auto">
+        <div style="float: right">
+            <button type="button" id="prevBtn" onclick="nextPrev(-1)">
+                ก่อนหน้า
+            </button>
+            <button type="button" id="nextBtn" onclick="nextPrev(1)">
+                ถัดไป
+            </button>
+        </div>
+    </div>
+
+    <!-- Circles which indicates the steps of the form: -->
+    <div style="text-align: center; margin-top: 40px">
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+    </div>
+</form>
+<script src="{% static 'thq/script.js' %}"></script>
+</body>
+</html>

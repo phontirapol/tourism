@@ -1,0 +1,87 @@
+body {
+  background: url("/static/thq/pexels-visionpic-net-1007657.jpg");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/* Style the form */
+#thqForm {
+  background-color: white;
+  border-radius: 25px;
+  opacity: 0.95;
+  margin: 100px auto;
+  padding: 45px;
+  width: 70%;
+  min-width: 300px;
+  color: black;
+}
+
+/* Style the input fields */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="button"] {
+  padding: 8px;
+  width: 100%;
+  font-size: 17px;
+  border: 1px solid #aaaaaa;
+  margin: 0.25em 0 0.5em 0;
+}
+
+/* Style radios and labels */
+input[type="radio"] {
+  margin: 0 10px 0 10px;
+}
+
+label {
+  display: block;
+}
+
+/* Style options */
+select {
+  padding: 8px;
+  width: 70%;
+  font-size: 17px;
+  border: 1px solid #aaaaaa;
+  margin: 0.25em 0 0.5em 0;
+}
+
+/* Hide all steps by default: */
+.tab {
+  display: none;
+}
+
+/* Make circles that indicate the steps of the form: */
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+/* Mark the active step: */
+.step.active {
+  opacity: 1;
+}
+
+/* Mark the steps that are finished and valid: */
+.step.finish {
+  background-color: #4caf50;
+}
+
+/* Underline styling */
+.underline {
+  text-decoration: underline;
+}
+
+/* Bold styling */
+.bold {
+  font-weight: bolder;
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome</title>
+  </head>
+  <body>
+    <!---------- Whole block ---------->
+    <div>
+      <h2>Please Select Your Preferred Language</h2>
+      <!--------- Language options --------->
+      <form action="{% url 'th-instruction' %}" method="get" class="lang">
+        <button class="lang" type="submit">ภาษาไทย</button>
+      </form>
+      <form action="{% url 'en-instruction' %}" method="get" class="lang">
+        <button class="lang" type="submit">English</button>
+      </form>
+      <form action="" method="get" class="lang">
+        <button class="lang" type="submit">Zhong Guo</button>
+      </form>
+    </div>
+  </body>
+</html>
